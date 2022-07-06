@@ -22,7 +22,7 @@ const loginUser= async function(req,res){
             {
              userId: loginCheck._id.toString(),     // --> payload
             },
-            "manish-manjunath-hamsa", {expiresIn:'2000s'}          // --> secret key
+            "project3", {expiresIn:'2000s'}          // --> secret key
         )
         res.setHeader("x-api-key", token)  // to send the token in the header of the browser used by the author(user).
         res.status(200).send({ status: true,msg:"user login successfully", 
