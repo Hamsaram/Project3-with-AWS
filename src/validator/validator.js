@@ -16,15 +16,15 @@ const isValidRequestBody = function (requestBody){
 }
 
 const isValidMobile = function (mobile){
-    return (/^[6-9]{1}[0-9]{9}$/.test(mobile))
+    return (/^[6-9]{1}[0-9]{9}$/.test(mobile.trim()))
 }
 
 const isValidEmail = function (email){
-    return (/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email))
+    return (/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email.trim()))
 }
 
 const isValidPassword = function (password){
-    return (/[a-z A-Z 0-9]{4,16}$/.test(password))
+    return (/[a-z A-Z 0-9]{4,16}$/.test(password.trim()))
 }
 
 const isValidObjectId = function(objectId) {             
@@ -32,10 +32,14 @@ const isValidObjectId = function(objectId) {
   }
   
 const isValidName = function (name){
-    return (/^[a-z A-Z ]{2,70}$/.test(name))
+    return (/^[a-z A-Z ]{2,70}$/.test(name.trim()))
 }
 const isValidISBN = function (name){
-    return (/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/.test(name))
+    return (/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/.test(name.trim()))
 }
 
-module.exports= {isValidField,isValidRequestBody,isValidMobile, isValidEmail, isValidPassword, isValidObjectId, isValidName, isValidISBN  }
+const isValidTitle = function (title){
+    return (/^(Mrs.|Mr.|Miss).?[A-z]$/.test(title))
+}
+
+module.exports= {isValidField,isValidRequestBody,isValidMobile, isValidEmail, isValidPassword, isValidObjectId, isValidName, isValidISBN, isValidTitle  }

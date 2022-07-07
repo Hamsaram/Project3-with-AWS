@@ -19,7 +19,7 @@ const createUser = async function (req, res) {
             return
         }
 
-        if (!isValidTitle(requestBody.title.trim())) {  //change--add this function and use trim()
+        if (!validator.isValidTitle(requestBody.title.trim())) {  //change--add this function and use trim()
             res.status(400).send({ status: false, message: `Title should be among Mr, Mrs and Miss` })
             return
         }
@@ -55,7 +55,7 @@ const createUser = async function (req, res) {
             return
         }
 
-        if (!(validator.isEmail(requestBody.email.trim()))) {   //change -- add trim() otherwise say invalid email
+        if (!(validator.isValidEmail(requestBody.email.trim()))) {   //change -- add trim() otherwise say invalid email
             return res.status(400).send({ status: false, msg: 'enter valid email' })
         }
 
@@ -71,7 +71,10 @@ const createUser = async function (req, res) {
 
         if (!(requestBody.password.length >= 8 && requestBody.password.length <= 15)) {
             return res.status(400).send({ status: false, message: 'password length should be greter then 8 and less than 15' })
+        }
 
+        if (!validator.isValidPassword(requestBody.password)){
+            return res.status(400).send({ status: false, message: 'password is invalid' })
         }
 
         // ADDRESS VALIDATION
