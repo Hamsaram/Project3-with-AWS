@@ -10,25 +10,21 @@ const createUser = async function (req, res) {
 
         // BODY VALIDATION
         if (!validator.isValidRequestBody(requestBody)) {
-            res.status(400).send({ status: false, message: 'Invalid request parameters. Please provide user details' }) //change -- write user instead of author
-            return
+            return res.status(400).send({ status: false, message: 'Invalid request parameters. Please provide user details' }) 
         }
 
         // TITLE VALIDATION
         if (!validator.isValidField(requestBody.title)) {
-            res.status(400).send({ status: false, message: 'title is required' })
-            return
+            return res.status(400).send({ status: false, message: 'title is required' }) 
         }
 
-        if (!validator.isValidUserTitle(requestBody.title.trim())) {  //change--add this function and use trim()
-            res.status(400).send({ status: false, message: `Title should be among Mr, Mrs and Miss` })
-            return
+        if (!validator.isValidUserTitle(requestBody.title.trim())) { 
+            return res.status(400).send({ status: false, message: `Title should be among Mr, Mrs and Miss` }) 
         }
 
         // NAME VALIDATION
         if (!validator.isValidField(requestBody.name)) {
-            res.status(400).send({ status: false, message: 'name is required' })
-            return
+            return res.status(400).send({ status: false, message: 'name is required' })
         }
 
         if (!validator.isValidName(requestBody.name)) {
@@ -37,8 +33,7 @@ const createUser = async function (req, res) {
 
         // PHONE VALIDATION
         if (!validator.isValidField(requestBody.phone)) {
-            res.status(400).send({ status: false, message: 'phone number is required' })
-            return
+            return res.status(400).send({ status: false, message: 'phone number is required' }) 
         }
 
         if (!validator.isValidMobile(requestBody.phone)) {
@@ -52,8 +47,8 @@ const createUser = async function (req, res) {
 
         // EMAIL VALIDATION
         if (!validator.isValidField(requestBody.email)) {
-            res.status(400).send({ status: false, message: 'email is required' })
-            return
+            return res.status(400).send({ status: false, message: 'email is required' })
+            
         }
 
         if (!(validator.isValidEmail(requestBody.email.trim()))) {   //change -- add trim() otherwise say invalid email
@@ -87,13 +82,11 @@ const createUser = async function (req, res) {
             // ADDRESS VALIDATION - STREET
             if (!validator.isValidField(requestBody.address.street)) {
                 return res.status(400).send({ status: false, message: 'street is required' })
-
             }
 
             // ADDRESS VALIDATION - CITY
             if (!validator.isValidField(requestBody.address.city)) {
                 return res.status(400).send({ status: false, message: 'city is required' })
-
             }
 
             // ADDRESS VALIDATION - PINCODE
