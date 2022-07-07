@@ -3,7 +3,6 @@ const mongoose = require('mongoose')
 const isValidField = function (value) {
     if (typeof value === 'undefined' || value === null) return false;
     if (typeof value === 'string' && value.trim().length === 0) return false;
-    if (typeof value === 'number') return false
     return true
 }
 
@@ -16,11 +15,11 @@ const isValidMobile = function (mobile) {
 }
 
 const isValidEmail = function (email) {
-    return (/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email.trim()))
+    return (/^[a-z0-9]+@[a-z]+\.[a-z]{2,3}/.test(email.trim()))
 }
 
 const isValidPassword = function (password) {
-    return (/[a-z A-Z 0-9]{4,16}$/.test(password.trim()))
+    return (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password.trim()))
 }
 
 const isValidObjectId = function (objectId) {
@@ -32,19 +31,31 @@ const isValidName = function (name) {
 }
 
 const isValidExcerpt = function (excerpt) {
-    return (/^[a-z A-Z ]{2,100}$/.test(excerpt.trim()))
+    return (/^[a-z A-Z ]{4,100}$/.test(excerpt.trim()))
 }
 
 const isValidISBN = function (isbn) {
     return (/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/.test(isbn.trim()))
 }
 
+const isReleasedAt = function (isReleasedAt){
+    return(/^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/).test(isReleasedAt.trim())
+}
+
 const isValidUserTitle = function (title) {
-    return (/^(Mrs.|Mr.|Miss).?[A-z]$/.test(title))
+    return (/^(Mrs|Mr|Miss)$/.test(title))
 }
 
 const isValidBookTitle = function (value) {
-    return (/^[a-z A-Z ]{2,70}$/.test(value.trim()))
+    return (/^[a-z A-Z ]{2,30}$/.test(value.trim()))
 }
 
-module.exports = { isValidField, isValidRequestBody, isValidMobile, isValidEmail, isValidPassword, isValidObjectId, isValidName, isValidISBN, isValidUserTitle, isValidBookTitle, isValidExcerpt }
+const isValidRating = function (rating){
+    return (/^[0-5]{1}$/.test(rating))
+}
+
+const isValidReview = function(review){
+    return (/^[a-z A-Z ]{10,}$/.test(review.trim()))
+}
+
+module.exports = { isValidField, isValidRequestBody, isReleasedAt ,isValidMobile, isValidRating, isValidReview, isValidEmail, isValidPassword, isValidObjectId, isValidName, isValidISBN, isValidUserTitle, isValidBookTitle, isValidExcerpt }

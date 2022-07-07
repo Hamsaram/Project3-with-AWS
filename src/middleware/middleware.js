@@ -36,11 +36,11 @@ const authorisation = async function (req, res, next){
 
         let userId = req.body.userId || req.query.userId || req.params.userId
         if(!userId){
-            return res.status(400).send({status : false, message : "userId must be present"})
+            return res.status(400).send({status : false, message : "UserId is required to proceed further!"})
         }
 
         if( userId != decodedToken._id){
-            return res.status(401).send({status : false, message : "Not Authorised"})
+            return res.status(401).send({status : false, message : "User is Not Authorised"})
         }
         
         next()

@@ -5,14 +5,46 @@ const mongoose = require('mongoose')
 
 const createReview = async function (req, res) {
   try {
+
+    
     let requestBody = req.body
+    let {reviewedBy, rating, review} = requestBody
+
+    // BODY VALIDATION
     if (!validator.isValidRequestBody(requestBody)) {
-        return res.status(400).send({ status: false, message: 'Invalid request parameters.' })
+        return res.status(400).send({ status: false, message: 'Requested field cannot be empty' })
+    }
+
+    // REVIEWED BY VALIDATION
+    if (!validator.isValidField(requestBody.reviewedBy)){
+      return res.status(400).send({ status: false, message: 'Reviewed By field is Required' })
+    }
+
+    if (!validator.isValidName(requestBody.reviewedBy)){
+      return res.status(400).send({ status: false, message: 'invalid reviewer name' })
+    }
+
+    // RATING VALIDATION
+    if (!validator.isValidField(requestBody.rating)){
+      return res.status(400).send({ status: false, message: 'Rating field cannot be empty' })
+    }
+
+    if (!validator.isValidRating(requestBody.rating)){
+      return res.status(400).send({ status: false, message: 'rating should be between 0 to 5' })
+    }
+
+    // REVIEW VALIDATION
+    if (!validator.isValidField(requestBody.review)){
+      return res.status(400).send({ status: false, message: 'Review field cannot be empty' })
+    }
+
+    if  (!validator.isValidReview(requestBody.review)){
+      return res.status(400).send({ status: false, message: 'review length is not sufficient!  or  review is in invalid format!' })
     }
 
     let checkBookId = await bookModels.findOne({ _id: req.params.bookId, isDeleted: false })
     if (!checkBookId) {
-      return res.status(404).send({ status: false, message: 'book does not exist' })
+      return res.status(404).send({ status: false, message: 'Book does not exist!  or  May have deleted!' })
     }
 
     let bookDetail = await bookModels.findOneAndUpdate({ _id: req.params.bookId }, { reviews: checkBookId.reviews + 1 }, { new: true }).select({__v:0})

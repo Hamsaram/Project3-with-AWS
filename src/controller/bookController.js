@@ -11,12 +11,12 @@ const createBook = async function (req, res) {
 
         // BODY VALIDATION
         if (!validator.isValidRequestBody(requestBody)) {
-            return res.status(400).send({ status: false, message: 'Invalid request parameters.' })
+            return res.status(400).send({ status: false, message: 'Invalid request parameters. Please provide user details' }) 
         }
 
         // TITLE VALIDATION
         if (!validator.isValidField(requestBody.title)) {
-            return res.status(400).send({ status: false, message: 'Title is required' })
+            return res.status(400).send({ status: false, message: 'Book Title is required' })
         }
 
         if (!validator.isValidBookTitle(requestBody.title.trim())) {
@@ -77,6 +77,11 @@ const createBook = async function (req, res) {
             res.status(400).send({ status: false, message: 'ReleasedAt is required' })
             return
         }
+        if (!validator.isReleasedAt(requestBody.releasedAt)) {
+            res.status(400).send({ status: false, message: `${requestBody.releasedAt} is not in valid format YYYY-MM-DD` })
+            return
+        }
+
 
         let savedBook1 = await bookModel.create(requestBody);
         res.status(201).send({ status: true, data: savedBook1 });
@@ -92,36 +97,15 @@ const getBooks = async function (req, res) {
     let data = req.query;
     let { userId, category, subcategory } = data;
 
-    // userId validation
-    if (!userId) {
-        return res.send({ msg: "book id is not present" })
+    if (!validator.isValidRequestBody(data)) {
+        res.send({ msg: "field cannot be empty to get book collection!" })
     }
-    if (!validator.isValidField(userId)) {
-        return res.status(400).send({ status: false, msg: "invalid request" })
-    }
-    if (!validator.isValidObjectId(userId)) {
-        return res.status(400).send({ status: false, message: `${bookId} is not a valid book id` })
-    }
-    // category validation
-    if (!category) {
-        return res.send({ msg: "category is not present" })
-    }
-    if (!validator.isValidField(category)) {
-        return res.status(400).send({ status: false, msg: "invalid request" })
-    }
-    // subcategory validation
-    if (!subcategory) {
-        return res.send({ msg: "subcategory is not present" })
-    }
-    if (!validator.isValidField(subcategory)) {
-        return res.status(400).send({ status: false, msg: "invalid request" })
-    }
-
+    
     // get books by filter
     let filter = { isDeleted: false, ...data };
     let findBook = await bookModel.find(filter).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1, subcategory: 1 }).sort({ title: 1 });
     if (findBook.length == 0) {
-        return res.status(404).send({status: false, msg: "No Book found"})
+        return res.status(404).send({status: false, msg: "No Book found with given filter(s)"})
     } else {res.send({ status: true, message: "Book List", data: findBook })}
     } 
 
@@ -135,8 +119,8 @@ const getBooksById = async function (req, res) {
     try {
     let bookId = req.params.bookId;
     // bookId validation
-    if (!bookId) {
-        return res.send({ msg: "book id is not present" })
+    if (!validator.isValidField(bookId)) {
+        return res.status(400).send({ msg: "book id is not present" })
     }
     if (!validator.isValidObjectId(bookId)) {
         return res.status(400).send({ status: false, message: `${bookId} is not a valid book id` })
@@ -146,12 +130,12 @@ const getBooksById = async function (req, res) {
     let reviews = await reviewModel.find({ bookId: bookId, isDeleted: false })
     reviews.reviewsData = reviews;
     if (reviews.length == 0){
-    return res.status(404).send({status: false, msg: "No book found"})
+    return res.status(404).send({status: false, msg: "No book found for the given request user Id !"})
     } 
     else { return res.send({ status: true, msg:"Book List with Reviews", data: book, reviews })}
     }
     catch (error){
-        res.status(500).send({status: true, msg: error.message})
+        return res.status(500).send({status: true, msg: error.message})
     }
 }
 

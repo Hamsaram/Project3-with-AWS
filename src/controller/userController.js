@@ -18,7 +18,7 @@ const createUser = async function (req, res) {
             return res.status(400).send({ status: false, message: 'title is required' }) 
         }
 
-        if (!validator.isValidUserTitle(requestBody.title.trim())) { 
+        if (!validator.isValidUserTitle(requestBody.title)) { 
             return res.status(400).send({ status: false, message: `Title should be among Mr, Mrs and Miss` }) 
         }
 
@@ -52,7 +52,7 @@ const createUser = async function (req, res) {
         }
 
         if (!(validator.isValidEmail(requestBody.email.trim()))) {   //change -- add trim() otherwise say invalid email
-            return res.status(400).send({ status: false, msg: 'enter valid email' })
+            return res.status(400).send({ status: false, msg: `${requestBody.email} is not valid email` })
         }
 
         const isEmailAlreadyUsed = await userModel.findOne({ email: requestBody.email });
@@ -70,7 +70,7 @@ const createUser = async function (req, res) {
         }
 
         if (!validator.isValidPassword(requestBody.password)) {
-            return res.status(400).send({ status: false, message: 'password is invalid' })
+            return res.status(400).send({ status: false, message: 'password should contain atleast 1 letter & 1 number' })
         }
 
         // ADDRESS VALIDATION
@@ -113,20 +113,20 @@ const loginUser = async function (req, res) {
         let { email, password } = requestBody
 
         if (!(requestBody.email && requestBody.password)) {
-            return res.status(400).send({ status: false, msg: "please fill the mandatory fields" })
+            return res.status(400).send({ status: false, msg: "Password and Email cannot be blank!" })
         }
 
         if (!validator.isValidEmail(requestBody.email)) {
-            return res.status(400).send({ status: false, msg: "email is not valid" })
+            return res.status(400).send({ status: false, msg: "Email is not valid" })
         }
 
         if (!validator.isValidPassword(requestBody.password)) {
-            return res.status(400).send({ status: false, msg: "password is not valid" })
+            return res.status(400).send({ status: false, msg: "Password is not valid" })
         }
 
         let validUser = await userModel.findOne({ email: requestBody.email, password: requestBody.password });
         if (validUser == null) {
-            return res.status(400).send({ status: true, msg: "email or password is not correct" })
+            return res.status(400).send({ status: true, msg: "Email or Password is not correct" })
         }
 
         let payload = { _id: validUser._id, exp: Math.floor(Date.now() / 1000) + (100 * 60), iat: Date.now() }
