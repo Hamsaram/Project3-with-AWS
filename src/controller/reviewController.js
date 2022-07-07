@@ -3,7 +3,7 @@ const bookModels = require('../model/bookModel')
 const mongoose = require('mongoose')  
 
 const createReview = async function (req, res) {
-  //try {
+  try {
     let requestBody = req.body
 
     let checkBookId = await bookModels.findOne({ _id: req.params.bookId, isDeleted: false })
@@ -19,8 +19,10 @@ const createReview = async function (req, res) {
     let create = await reviewModels.create(requestBody);
     let data = await reviewModels.findOne({bookId: req.params.bookId}).select({__v:0, isDeleted:0})
      return res.status(201).send({ status: true, message: 'review created sucessfully', data:{...bookDetail.toObject(),review:data} }) //or bookDetail._doc
+    } catch (error) {
+      return res.status(500).send({ status: false, error: error.message });
+    }
 }
 
 module.exports.createReview=createReview
 
-// .isValidObjectId
