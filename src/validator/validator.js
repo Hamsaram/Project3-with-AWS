@@ -7,10 +7,6 @@ const isValidField = function (value) {
     return true
 }
 
-// const isNumberValid = function (value){
-
-// }
-
 const isValidRequestBody = function (requestBody) {
     return Object.keys(requestBody).length > 0
 }

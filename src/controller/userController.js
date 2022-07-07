@@ -27,7 +27,7 @@ const createUser = async function (req, res) {
 
         // NAME VALIDATION
         if (!validator.isValidField(requestBody.name)) {
-            res.status(400).send({ status: false, message: ' name is required' })
+            res.status(400).send({ status: false, message: 'name is required' })
             return
         }
 
@@ -37,7 +37,7 @@ const createUser = async function (req, res) {
 
         // PHONE VALIDATION
         if (!validator.isValidField(requestBody.phone)) {
-            res.status(400).send({ status: false, message: 'phone  is required' })
+            res.status(400).send({ status: false, message: 'phone number is required' })
             return
         }
 
@@ -99,7 +99,6 @@ const createUser = async function (req, res) {
             // ADDRESS VALIDATION - PINCODE
             if (!validator.isValidField(requestBody.address.pincode)) {
                 return res.status(400).send({ status: false, message: 'pincode is required' })
-
             }
         }
 

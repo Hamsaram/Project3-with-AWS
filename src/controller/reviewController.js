@@ -6,6 +6,9 @@ const mongoose = require('mongoose')
 const createReview = async function (req, res) {
   try {
     let requestBody = req.body
+    if (!validator.isValidRequestBody(requestBody)) {
+        return res.status(400).send({ status: false, message: 'Invalid request parameters.' })
+    }
 
     let checkBookId = await bookModels.findOne({ _id: req.params.bookId, isDeleted: false })
     if (!checkBookId) {
