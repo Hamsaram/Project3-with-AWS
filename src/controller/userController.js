@@ -2,6 +2,7 @@ const userModel = require("../model/userModel");
 const jwt = require("jsonwebtoken");
 const validator = require("../validator/validator")
 
+// CREATING USER PROFILE
 const createUser = async function (req, res) {
     try {
 
@@ -40,9 +41,9 @@ const createUser = async function (req, res) {
             return
         }
 
-        let check1 = requestBody.phone
-        let check2 = /^[0-9]{10}$/
-        if (!check2.test(check1)) return res.status(400).send({ status: false, msg: "Please Enter a valid phone" });
+        if (!validator.isValidMobile(requestBody.phone)) {
+            return res.status(400).send({ status: false, msg: `${requestBody.phone} is not valid` })
+        }
 
         const isphoneAlreadyUsed = await userModel.findOne({ phone: requestBody.phone });
         if (isphoneAlreadyUsed) {
@@ -73,14 +74,13 @@ const createUser = async function (req, res) {
             return res.status(400).send({ status: false, message: 'password length should be greter then 8 and less than 15' })
         }
 
-        if (!validator.isValidPassword(requestBody.password)){
+        if (!validator.isValidPassword(requestBody.password)) {
             return res.status(400).send({ status: false, message: 'password is invalid' })
         }
 
         // ADDRESS VALIDATION
         if (Object.keys(requestBody.address).length === 0) {
             return res.status(400).send({ status: false, message: 'address cant be empty' })
-
         }
 
         if (requestBody.address) {
@@ -113,7 +113,7 @@ const createUser = async function (req, res) {
 };
 
 
-//second Login api
+// USER LOGGIN
 const loginUser = async function (req, res) {
     try {
 
@@ -137,15 +137,15 @@ const loginUser = async function (req, res) {
             return res.status(400).send({ status: true, msg: "email or password is not correct" })
         }
 
-        let payload = { _id: validUser._id, exp: Math.floor(Date.now() / 1000) + (100 * 60), iat: Date.now()}
+        let payload = { _id: validUser._id, exp: Math.floor(Date.now() / 1000) + (100 * 60), iat: Date.now() }
         let token = jwt.sign(payload, 'project3')
         console.log(token)
         res.setHeader('x-api-key', token);
-        res.status(200).send({ status: true, msg: "user logged in successfully", data: {token, exp: payload.exp, iat: payload.iat} })
-} 
+        res.status(200).send({ status: true, msg: "user logged in successfully", data: { token, exp: payload.exp, iat: payload.iat } })
+    }
     catch (error) {
-    res.status(500).send({ status: false, msg: error.message });
+        res.status(500).send({ status: false, msg: error.message });
+    }
 }
-}
-module.exports.createUser = createUser
-module.exports.loginUser = loginUser
+
+module.exports = { createUser, loginUser }

@@ -32,11 +32,15 @@ const isValidObjectId = function (objectId) {
 }
 
 const isValidName = function (name) {
-    return (/^[a-z A-Z ]{2,70}$/.test(name.trim()))
+    return (/^[a-z A-Z ]{2,30}$/.test(name.trim()))
 }
 
-const isValidISBN = function (name) {
-    return (/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/.test(name.trim()))
+const isValidExcerpt = function (excerpt) {
+    return (/^[a-z A-Z ]{2,100}$/.test(excerpt.trim()))
+}
+
+const isValidISBN = function (isbn) {
+    return (/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/.test(isbn.trim()))
 }
 
 const isValidUserTitle = function (title) {
@@ -47,4 +51,4 @@ const isValidBookTitle = function (value) {
     return (/^[a-z A-Z ]{2,70}$/.test(value.trim()))
 }
 
-module.exports = { isValidField, isValidRequestBody, isValidMobile, isValidEmail, isValidPassword, isValidObjectId, isValidName, isValidISBN, isValidUserTitle, isValidBookTitle }
+module.exports = { isValidField, isValidRequestBody, isValidMobile, isValidEmail, isValidPassword, isValidObjectId, isValidName, isValidISBN, isValidUserTitle, isValidBookTitle, isValidExcerpt }
