@@ -66,16 +66,6 @@ const createBook = async function (req, res) {
             return
         }
 
-        if (!(req.validToken._id == requestBody.userId)) {
-            return res.status(400).send({ status: false, message: 'unauthorized access' })
-        }
-
-        //  check user id exist or not 
-
-        let userCheck = await userModel.findOne({ _id: requestBody.userId })
-        if (!userCheck) {
-            return res.status(400).send({ status: false, msg: "user dosnt exis with this user id" })
-        }
 
         // unique check  title and isbn is already exist or not 
 
@@ -107,7 +97,7 @@ const getBooks = async function (req, res) {
     let data = req.query;
     let { userId, category, subcategory } = data;
     let filter = { isDeleted: false, ...data };
-    let findBook = await bookModel.find(filter).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1, }).sort({ title: 1 });
+    let findBook = await bookModel.find(filter).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1, subcategory:1 }).sort({ title: 1 });
     res.send({ status: true, message: "Book List", data: findBook });
 }
 
@@ -141,7 +131,7 @@ const updateBook = async function (req, res) {
         if (checkTitle) {
             return res.send({ status: false, msg: "title should be unique" })
         }
-        if (!validator.isValidName(requestBody.title)) {
+        if (!validator.isValidBookTitle(requestBody.title)) {
             return res.status(400).send({ status: false, message: `${requestBody.title} is not a valid title` })
         }
         if (!validator.isValidField(requestBody.title)) {

@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 
-const isValidField = function (value){
-    if ( typeof value === 'undefined'  || value === null) return false;
-    if ( typeof value === 'string' && value.trim().length === 0 ) return false;
+const isValidField = function (value) {
+    if (typeof value === 'undefined' || value === null) return false;
+    if (typeof value === 'string' && value.trim().length === 0) return false;
     if (typeof value === 'number') return false
     return true
 }
@@ -11,35 +11,40 @@ const isValidField = function (value){
 
 // }
 
-const isValidRequestBody = function (requestBody){
+const isValidRequestBody = function (requestBody) {
     return Object.keys(requestBody).length > 0
 }
 
-const isValidMobile = function (mobile){
+const isValidMobile = function (mobile) {
     return (/^[6-9]{1}[0-9]{9}$/.test(mobile.trim()))
 }
 
-const isValidEmail = function (email){
+const isValidEmail = function (email) {
     return (/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email.trim()))
 }
 
-const isValidPassword = function (password){
+const isValidPassword = function (password) {
     return (/[a-z A-Z 0-9]{4,16}$/.test(password.trim()))
 }
 
-const isValidObjectId = function(objectId) {             
+const isValidObjectId = function (objectId) {
     return mongoose.Types.ObjectId.isValid(objectId)
-  }
-  
-const isValidName = function (name){
+}
+
+const isValidName = function (name) {
     return (/^[a-z A-Z ]{2,70}$/.test(name.trim()))
 }
-const isValidISBN = function (name){
+
+const isValidISBN = function (name) {
     return (/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/.test(name.trim()))
 }
 
-const isValidTitle = function (title){
+const isValidUserTitle = function (title) {
     return (/^(Mrs.|Mr.|Miss).?[A-z]$/.test(title))
 }
 
-module.exports= {isValidField,isValidRequestBody,isValidMobile, isValidEmail, isValidPassword, isValidObjectId, isValidName, isValidISBN, isValidTitle  }
+const isValidBookTitle = function (value) {
+    return (/^[a-z A-Z ]{2,70}$/.test(value.trim()))
+}
+
+module.exports = { isValidField, isValidRequestBody, isValidMobile, isValidEmail, isValidPassword, isValidObjectId, isValidName, isValidISBN, isValidUserTitle, isValidBookTitle }

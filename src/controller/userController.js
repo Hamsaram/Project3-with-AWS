@@ -19,7 +19,7 @@ const createUser = async function (req, res) {
             return
         }
 
-        if (!validator.isValidTitle(requestBody.title.trim())) {  //change--add this function and use trim()
+        if (!validator.isValidUserTitle(requestBody.title.trim())) {  //change--add this function and use trim()
             res.status(400).send({ status: false, message: `Title should be among Mr, Mrs and Miss` })
             return
         }
@@ -137,7 +137,7 @@ const loginUser = async function (req, res) {
             return res.status(400).send({ status: true, msg: "email or password is not correct" })
         }
 
-        let payload = { _id: validUser._id, exp: Math.floor(Date.now() / 1000) + (30 * 60), iat: Date.now()}
+        let payload = { _id: validUser._id, exp: Math.floor(Date.now() / 1000) + (100 * 60), iat: Date.now()}
         let token = jwt.sign(payload, 'project3')
         console.log(token)
         res.setHeader('x-api-key', token);
