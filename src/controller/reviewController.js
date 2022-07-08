@@ -6,48 +6,52 @@ const mongoose = require('mongoose')
 const createReview = async function (req, res) {
   try {
 
-    
-    let requestBody = req.body
-    let {reviewedBy, rating, review} = requestBody
+    let bookId = req.params.bookId
+    let data = req.body
+    let { review, rating, reviewedBy } = data
 
     // BODY VALIDATION
-    if (!validator.isValidRequestBody(requestBody)) {
-        return res.status(400).send({ status: false, message: 'Requested field cannot be empty' })
+    if (!validator.isValidRequestBody(data)) {
+      return res.status(400).send({ status: false, message: 'Requested field cannot be empty' })
     }
 
     // RATING VALIDATION
-    if (!validator.isValidField(requestBody.rating)){
+    if (!validator.isValidField(rating)) {
       return res.status(400).send({ status: false, message: 'Rating field cannot be empty' })
     }
-    if (!validator.isValidRating(requestBody.rating)){
+    if (!validator.isValidRating(rating)) {
       return res.status(400).send({ status: false, message: 'rating should be between 0 to 5' })
     }
 
     //REVIEW VALIDATION
-    if (!validator.isValidField(requestBody.review)){
+    if (!validator.isValidField(review)) {
       return res.status(400).send({ status: false, message: 'Review field cannot be empty' })
     }
-    if  (!validator.isValidReview(requestBody.review)){
+    if (!validator.isValidReview(review)) {
       return res.status(400).send({ status: false, message: 'review length is not sufficient!  or  review is in invalid format!' })
     }
 
-    let checkBookId = await bookModels.findOne({ _id: req.params.bookId, isDeleted: false })
-    if (!checkBookId) {
-      return res.status(404).send({ status: false, message: 'Book does not exist!  or  May have deleted!' })
-    }
+    // BOOK ID VALIDATION
+    if (!bookId)
+      return res.status(400).send({ status: false, msg: "Bad Request, please provide BookId in params" })
 
-    let bookDetail = await bookModels.findOneAndUpdate({ _id: req.params.bookId }, { reviews: checkBookId.reviews + 1 },{ new: true })
-    requestBody.reviewedAt = new Date()
-    requestBody.bookId = req.params.bookId
-    requestBody.reviewedBy = requestBody.reviewedBy?requestBody.reviewedBy:'Guest';
-    
-    let create = await reviewModels.create(requestBody);
-    let data = await reviewModels.findOne({bookId: req.params.bookId})
-     return res.status(201).send({ status: true, message: 'review created sucessfully', data:{...bookDetail.toObject(),review:data} }) //or bookDetail._doc
-     
-    } catch (error) {
-      return res.status(500).send({ status: false, error: error.message });
+    let check = await bookModels.findOne({ _id: bookId, isDeleted: false })
+    if (!check) {
+      return res.status(404).send({ status: false, message: "No book found or deleted" })
+    } else {
+
+      data.reviewedAt = new Date()
+      data.bookId = bookId
+      data.reviewedBy = data.reviewedBy?data.reviewedBy:'Guest'
+      let newReview = await bookModels.findOneAndUpdate({ _id: bookId }, { $inc: {review: 1},}, { new: true, upsert: true })
+      let savedData = await reviewModels.create(data)
+      newReview._doc["reviewData"] = savedData
+      return res.status(201).send({ status: true, data: newReview })
     }
+  }
+  catch (error) {
+    res.status(500).send({ status: false, msg: "error", err: error.message })
+  }
 }
 
 module.exports.createReview=createReview
