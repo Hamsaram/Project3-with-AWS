@@ -15,6 +15,7 @@ const authentication = async function (req, res, next){
         if(!decodedToken){
             return res.status(400).send({status : false, message : "Token validation failed"})
         }
+        
         req.validUserId = decodedToken._id;
         
         next()
@@ -72,7 +73,7 @@ const authorisation = async function (req, res, next){
 
             if(req.params.bookId){
                 if(!validator.isValidObjectId(bookId))
-                return res.status().send({status :false, message:`This BookId (${bookId}) is invalid !!`})
+                return res.status(400).send({status :false, message:`This BookId (${bookId}) is invalid !!`})
 
                 let fetchBookData = await bookModel.findById(bookId);
             

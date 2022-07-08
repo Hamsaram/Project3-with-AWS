@@ -133,7 +133,7 @@ const loginUser = async function (req, res) {
         let token = jwt.sign(payload, 'project3')
         console.log(token)
         res.setHeader('x-api-key', token);
-        res.status(200).send({ status: true, msg: "user logged in successfully", data: { token, exp: payload.exp, iat: payload.iat } })
+        res.status(200).send({ status: true, msg: "user logged in successfully", data: { token, userId : validUser._id, exp: payload.exp, iat: payload.iat } })
     }
     catch (error) {
         res.status(500).send({ status: false, msg: error.message });
