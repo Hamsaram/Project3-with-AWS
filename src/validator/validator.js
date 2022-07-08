@@ -19,7 +19,7 @@ const isValidEmail = function (email) {
 }
 
 const isValidPassword = function (password) {
-    return (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password.trim()))
+    return (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/.test(password))
 }
 
 const isValidObjectId = function (objectId) {

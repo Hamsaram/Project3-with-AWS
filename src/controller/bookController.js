@@ -98,7 +98,7 @@ const getBooks = async function (req, res) {
     let { userId, category, subcategory } = data;
 
     if (!validator.isValidRequestBody(data)) {
-        res.send({ msg: "field cannot be empty to get book collection!" })
+        return res.send({ msg: "field cannot be empty to get book collection!" })
     }
     
     // get books by filter
@@ -106,11 +106,11 @@ const getBooks = async function (req, res) {
     let findBook = await bookModel.find(filter).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1, subcategory: 1 }).sort({ title: 1 });
     if (findBook.length == 0) {
         return res.status(404).send({status: false, msg: "No Book found with given filter(s)"})
-    } else {res.send({ status: true, message: "Book List", data: findBook })}
+    } else {return res.send({ status: true, message: "Book List", data: findBook })}
     } 
 
     catch (error){
-        res.status(500).send({status: true, msg: error.message})
+        return res.status(500).send({status: true, msg: error.message})
     }
 }
 
@@ -129,10 +129,8 @@ const getBooksById = async function (req, res) {
     let book = await bookModel.findById(bookId, { isDeleted: false })
     let reviews = await reviewModel.find({ bookId: bookId, isDeleted: false })
     reviews.reviewsData = reviews;
-    if (reviews.length == 0){
-    return res.status(404).send({status: false, msg: "No book found for the given request user Id !"})
-    } 
-    else { return res.send({ status: true, msg:"Book List with Reviews", data: book, reviews })}
+
+     return res.send({ status: true, msg:"Book List with Reviews", data: {book, reviewsData: reviews} })
     }
     catch (error){
         return res.status(500).send({status: true, msg: error.message})
