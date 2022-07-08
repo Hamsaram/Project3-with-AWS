@@ -192,7 +192,7 @@ const deleteBook = async function (req, res) {
 
     // bookId validation
     if (!validator.isValidRequestBody(req.params)) {
-        return res.send({ msg: "book id is not present 88888" })
+        return res.send({ msg: "book id is not present" })
     }
     if (!bookId) {
         return res.send({ msg: "book id is not present" })
