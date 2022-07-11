@@ -28,6 +28,14 @@ const isValidPassword = function (password) {
     return (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/.test(password))
 }
 
+const isValidStreet = function (address){
+    return (/^([a-zA-z0-9/\\''(),-\s]{5,255})$/.test(address.trim()))
+}
+
+const isValidPincode = function (pincode){
+    return (/^[1-9][0-9]{5}$/.test(pincode))
+}
+
 const isValidObjectId = function (objectId) {
     return mongoose.Types.ObjectId.isValid(objectId)
 }
@@ -35,8 +43,6 @@ const isValidObjectId = function (objectId) {
 const isValidName = function (name) {
     return (/^[a-z A-Z ]{2,30}$/.test(name.trim()))
 }
-
-
 
 const isValidExcerpt = function (excerpt) {
     return (/^[a-z A-Z ]{4,100}$/.test(excerpt.trim()))
@@ -66,4 +72,4 @@ const isValidReview = function(review){
     return (/^[a-z A-Z ]{10,}$/.test(review.trim()))
 }
 
-module.exports = { isValidField, isValidRequestBody, isValidFieldNumber, isReleasedAt ,isValidMobile, isValidRating, isValidReview, isValidEmail, isValidPassword, isValidObjectId, isValidName, isValidISBN, isValidUserTitle, isValidBookTitle, isValidExcerpt }
+module.exports = { isValidField, isValidRequestBody, isValidStreet, isValidPincode, isValidFieldNumber, isReleasedAt ,isValidMobile, isValidRating, isValidReview, isValidEmail, isValidPassword, isValidObjectId, isValidName, isValidISBN, isValidUserTitle, isValidBookTitle, isValidExcerpt }
