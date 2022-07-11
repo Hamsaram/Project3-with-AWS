@@ -6,6 +6,12 @@ const isValidField = function (value) {
     return true
 }
 
+const isValidFieldNumber = function(value){
+    if (typeof value === 'undefined' || value === null) return false;
+    if (typeof value === 'string' ) return false;
+    return true
+}
+
 const isValidRequestBody = function (requestBody) {
     return Object.keys(requestBody).length > 0
 }
@@ -30,6 +36,8 @@ const isValidName = function (name) {
     return (/^[a-z A-Z ]{2,30}$/.test(name.trim()))
 }
 
+
+
 const isValidExcerpt = function (excerpt) {
     return (/^[a-z A-Z ]{4,100}$/.test(excerpt.trim()))
 }
@@ -51,11 +59,11 @@ const isValidBookTitle = function (value) {
 }
 
 const isValidRating = function (rating){
-    return (/^[0-5]{1}$/.test(rating))
+    return (/^[1-5]{1}$/.test(rating))
 }
 
 const isValidReview = function(review){
     return (/^[a-z A-Z ]{10,}$/.test(review.trim()))
 }
 
-module.exports = { isValidField, isValidRequestBody, isReleasedAt ,isValidMobile, isValidRating, isValidReview, isValidEmail, isValidPassword, isValidObjectId, isValidName, isValidISBN, isValidUserTitle, isValidBookTitle, isValidExcerpt }
+module.exports = { isValidField, isValidRequestBody, isValidFieldNumber, isReleasedAt ,isValidMobile, isValidRating, isValidReview, isValidEmail, isValidPassword, isValidObjectId, isValidName, isValidISBN, isValidUserTitle, isValidBookTitle, isValidExcerpt }

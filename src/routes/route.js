@@ -18,8 +18,8 @@ router.delete("/books/:bookId", authentication, authorisation, bookController.de
 
                          // <-----------REVIEW API----------------->
 router.post("/books/:bookId/review", reviewController.createReview)
-
-
+router.put("/books/:bookId/review/:reviewId", reviewController.updateReview)
+router.delete("/books/:bookId/review/:reviewId", reviewController.deleteReview)
                         // <-----------No Page Found----------------->
 router.all('*', (req, res) => {res.status(404).send({status : false, message:"No Page Found !!"})})
 

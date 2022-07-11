@@ -37,7 +37,7 @@ const createUser = async function (req, res) {
         }
 
         if (!validator.isValidMobile(requestBody.phone)) {
-            return res.status(400).send({ status: false, msg: `${requestBody.phone} is not valid` })
+            return res.status(400).send({ status: false, message: `${requestBody.phone} is not valid` })
         }
 
         const isphoneAlreadyUsed = await userModel.findOne({ phone: requestBody.phone });
@@ -52,7 +52,7 @@ const createUser = async function (req, res) {
         }
 
         if (!(validator.isValidEmail(requestBody.email.trim()))) {   //change -- add trim() otherwise say invalid email
-            return res.status(400).send({ status: false, msg: `${requestBody.email} is not valid email` })
+            return res.status(400).send({ status: false, message: `${requestBody.email} is not valid email` })
         }
 
         const isEmailAlreadyUsed = await userModel.findOne({ email: requestBody.email });
@@ -96,11 +96,11 @@ const createUser = async function (req, res) {
         }
 
         let userSaved = await userModel.create(requestBody);
-        res.status(201).send({ status: true, msg: "user successfully created", data: userSaved });
+        res.status(201).send({ status: true, message: "user successfully created", data: userSaved });
 
     }
     catch (error) {
-        res.status(500).send({ status: false, msg: error.message });
+        res.status(500).send({ status: false, message: error.message });
     }
 };
 
@@ -113,30 +113,30 @@ const loginUser = async function (req, res) {
         let { email, password } = requestBody
 
         if (!(requestBody.email && requestBody.password)) {
-            return res.status(400).send({ status: false, msg: "Password and Email cannot be blank!" })
+            return res.status(400).send({ status: false, message: "Password and Email cannot be blank!" })
         }
 
         if (!validator.isValidEmail(requestBody.email)) {
-            return res.status(400).send({ status: false, msg: "Email is not valid" })
+            return res.status(400).send({ status: false, message: "Email is not valid" })
         }
 
         if (!validator.isValidPassword(requestBody.password)) {
-            return res.status(400).send({ status: false, msg: "Password is not valid" })
+            return res.status(400).send({ status: false, message: "Password is not valid" })
         }
 
         let validUser = await userModel.findOne({ email: requestBody.email, password: requestBody.password });
         if (validUser == null) {
-            return res.status(400).send({ status: true, msg: "Email or Password is not correct" })
+            return res.status(400).send({ status: true, message: "Email or Password is not correct" })
         }
 
         let payload = { _id: validUser._id, exp: Math.floor(Date.now() / 1000) + (100 * 60), iat: Date.now() }
         let token = jwt.sign(payload, 'project3')
         console.log(token)
         res.setHeader('x-api-key', token);
-        res.status(200).send({ status: true, msg: "user logged in successfully", data: { token, userId : validUser._id, exp: payload.exp, iat: payload.iat } })
+        res.status(200).send({ status: true, message: "user logged in successfully", data: { token, userId : validUser._id, exp: payload.exp, iat: payload.iat } })
     }
     catch (error) {
-        res.status(500).send({ status: false, msg: error.message });
+        res.status(500).send({ status: false, message: error.message });
     }
 }
 
