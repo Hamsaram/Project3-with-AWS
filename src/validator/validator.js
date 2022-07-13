@@ -49,7 +49,7 @@ const isValidExcerpt = function (excerpt) {
 }
 
 const isValidISBN = function (isbn) {
-    return (/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/.test(isbn.trim()))
+    return (/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/.test(isbn))
 }
 
 const isReleasedAt = function (isReleasedAt){
@@ -61,7 +61,7 @@ const isValidUserTitle = function (title) {
 }
 
 const isValidBookTitle = function (value) {
-    return (/^[a-z A-Z ]{2,30}$/.test(value.trim()))
+    return (/^[a-z A-Z ]{2,30}$/.test(value))
 }
 
 const isValidRating = function (rating){

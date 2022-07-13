@@ -74,9 +74,6 @@ const createUser = async function (req, res) {
         }
 
         // ADDRESS VALIDATION
-        if (Object.keys(requestBody.address).length === 0) {
-            return res.status(400).send({ status: false, message: 'address cant be empty' })
-        }
 
         if (requestBody.address) {
             // ADDRESS VALIDATION - STREET
