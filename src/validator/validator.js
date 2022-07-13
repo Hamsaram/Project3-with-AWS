@@ -17,7 +17,7 @@ const isValidRequestBody = function (requestBody) {
 }
 
 const isValidMobile = function (mobile) {
-    return (/^[6-9]{1}[0-9]{9}$/.test(mobile.trim()))
+    return (/^[6-9]{1}[0-9]{9}$/.test(mobile))
 }
 
 const isValidEmail = function (email) {
