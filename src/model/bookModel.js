@@ -9,7 +9,10 @@ const bookSchema = new mongoose.Schema({
         trim: true,
         lowercase: true
     },
-
+    bookCover: {
+        type: String
+    },
+    
     excerpt: {
         type: String,
         required: true,

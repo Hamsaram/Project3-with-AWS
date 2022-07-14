@@ -5,6 +5,7 @@ const bookController = require("../controller/bookController")
 const reviewController = require("../controller/reviewController")
 const {authentication, authorisation} = require ("../middleware/middleware")
 
+
                         // <-----------USER API----------------->
 router.post("/register",userController.createUser)
 router.post("/login",userController.loginUser)
@@ -15,6 +16,8 @@ router.get("/books",authentication, bookController.getBooks)
 router.get("/books/:bookId", authentication, bookController.getBooksById)
 router.put("/books/:bookId", authentication, authorisation, bookController.updateBook)
 router.delete("/books/:bookId", authentication, authorisation, bookController.deleteBook)
+
+//router.post("/uploadFile", bookController.uploadFiles)
 
                          // <-----------REVIEW API----------------->
 router.post("/books/:bookId/review", reviewController.createReview)

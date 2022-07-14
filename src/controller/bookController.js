@@ -1,6 +1,7 @@
 const bookModel = require("../model/bookModel")
 const reviewModel = require("../model/reviewModel")
 const validator = require("../validator/validator")
+const {uploadFile} = require("../aws/awsConnect")
 const mongoose = require('mongoose')
 
 // CREATE BOOK
@@ -8,24 +9,23 @@ const createBook = async function (req, res) {
     try {
 
         let requestBody = req.body
-        let title = requestBody.title
-        requestBody.title = title
+        let files = req.files
         // BODY VALIDATION
         if (!validator.isValidRequestBody(requestBody)) {
             return res.status(400).send({ status: false, message: 'Invalid request parameters. Please provide user details' })
         }
 
         // TITLE VALIDATION
-        if (!validator.isValidField(title)) {
+        if (!validator.isValidField(requestBody.title)) {
             return res.status(400).send({ status: false, message: 'Book Title is required' })
         }
-        if (!validator.isValidBookTitle(title.trim())) {
+        if (!validator.isValidBookTitle(requestBody.title.trim())) {
             res.status(400).send({ status: false, message: `The book title is not valid` })
             return
         }
 
         // (title unique check)
-        let titleCheck = await bookModel.findOne({ title })
+        let titleCheck = await bookModel.findOne({ title: requestBody.title })
         if (titleCheck) {
             return res.status(400).send({ status: false, message: "Title should be unique" })
         }
@@ -82,6 +82,13 @@ const createBook = async function (req, res) {
             res.status(400).send({ status: false, message: `${requestBody.releasedAt} is not in valid format YYYY-MM-DD` })
             return
         }
+        
+        if(files && files.length>0){
+            //upload to s3 and get the uploaded link
+            // res.send the link back to frontend/postman
+            let uploadedFileURL= await uploadFile( files[0] )
+            requestBody.bookCover = uploadedFileURL
+        }
 
         let savedBook1 = await bookModel.create(requestBody);
         res.status(201).send({ status: true, data: savedBook1 });
@@ -90,6 +97,7 @@ const createBook = async function (req, res) {
         res.status(500).send({ status: false, message: error.message });
     }
 };
+
 
 // GET BOOKS BY QUERY
 const getBooks = async function (req, res) {

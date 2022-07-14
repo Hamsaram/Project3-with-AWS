@@ -62,6 +62,7 @@ const createReview = async function (req, res) {
 
 
 const updateReview = async function (req, res) {
+  try {
   let bookId = req.params.bookId
   let reviewId = req.params.reviewId
   let data = req.body
@@ -97,9 +98,13 @@ const updateReview = async function (req, res) {
   let updateReview = await reviewModels.findOneAndUpdate({ _id: reviewId }, data, { new: true })
   book._doc['reviewData'] = updateReview
   return res.status(200).send({ status: true, message: "the review is updated successfully", data: book })
+} catch (error){
+  res.status(500).send({ status: false, message: "error", err: error.message })
+}
 }
 
 const deleteReview = async function (req, res) {
+  try {
   let bookId = req.params.bookId
   let reviewId = req.params.reviewId
 
@@ -119,6 +124,9 @@ const deleteReview = async function (req, res) {
   bookExist.reviews = bookExist.reviews === 0 ? 0 : bookExist.reviews - 1
   await bookExist.save()
   return res.status(200).send({ status: true, message: "review deleted successfully" });
+  } catch {
+    res.status(500).send({ status: false, message: "error", err: error.message })
+  }
 }
 
 module.exports = { createReview, updateReview, deleteReview }
