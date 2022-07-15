@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/manju349/PROJECT-3#readme",
   "dependencies": {
-    "aws-sdk": "^2.1174.0",
+    "aws-sdk": "^2.1175.0",
     "express": "^4.18.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.4.3",
